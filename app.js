@@ -20,7 +20,7 @@ app.use(express.json());
 app.set("trust proxy", 1);
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin:"https://storageapp-frontend-user.netlify.app" ,
     credentials: true,
   })
 );
