@@ -123,7 +123,7 @@ export const login = async (req, res, next) => {
     httpOnly: true,
     signed: true,
     sameSite: "none",
-    securs:true,
+    secure:true,
     maxAge: sessionExpiryTime,
   });
   res.json({ message: "logged in" });
