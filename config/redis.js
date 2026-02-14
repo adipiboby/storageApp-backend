@@ -1,7 +1,10 @@
 import { createClient } from "redis";
 
 const redisClient = createClient({
-  password: "My$trong123Pass",
+  url:process.env.REDIS_URL,
+    username: 'default',
+    password: 'atHm7AP5fVfBxHuHhRpcK62YPWaakaKU',
+  // password: "My$trong123Pass",//localhost
 });
 
 redisClient.on("error", (err) => {

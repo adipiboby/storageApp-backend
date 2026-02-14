@@ -144,7 +144,8 @@ export const getAllUsers = async (req, res) => {
 };
 
 export const getCurrentUser = async (req, res) => {
-  const user = await User.findById(req.user._id).lean();
+  try{
+const user = await User.findById(req.user._id).lean();
   const rootDir = await Directory.findById(user.rootDirId).lean();
   res.status(200).json({
     name: user.name,
@@ -154,6 +155,11 @@ export const getCurrentUser = async (req, res) => {
     maxStorageInBytes: user.maxStorageInBytes,
     usedStorageInBytes: rootDir.size,
   });
+  }catch(err){
+    console.log("usercontroller")
+    console.log(err)
+  }
+  
 };
 
 export const logout = async (req, res) => {
