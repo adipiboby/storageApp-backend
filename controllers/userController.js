@@ -6,6 +6,7 @@ import OTP from "../models/otpModel.js";
 import redisClient from "../config/redis.js";
 import { z } from "zod/v4";
 import { loginSchema, registerSchema } from "../validators/authSchema.js";
+import { createCloudFrontGetSignedUrl } from "../services/cloudfront.js";
 
 export const register = async (req, res, next) => {
   const { success, data, error } = registerSchema.safeParse(req.body);
@@ -104,7 +105,9 @@ export const login = async (req, res, next) => {
       RETURN: [],
     },
   );
-
+  
+console.log(allSessions)
+console.log("session id")
   if (allSessions.total >= 2) {
     await redisClient.del(allSessions.documents[0].id);
   }
@@ -124,7 +127,6 @@ export const login = async (req, res, next) => {
     signed: true,
     sameSite: "none",
     secure: true,
-    path: "/",
     maxAge: sessionExpiryTime,
   });
   res.json({ message: "logged in" });
