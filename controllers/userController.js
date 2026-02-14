@@ -39,7 +39,7 @@ export const register = async (req, res, next) => {
         parentDirId: null,
         userId,
       },
-      { session }
+      { session },
     );
 
     await User.insertOne(
@@ -50,7 +50,7 @@ export const register = async (req, res, next) => {
         password,
         rootDirId,
       },
-      { session }
+      { session },
     );
 
     session.commitTransaction();
@@ -102,7 +102,7 @@ export const login = async (req, res, next) => {
     `@userId:{${user.id}}`,
     {
       RETURN: [],
-    }
+    },
   );
 
   if (allSessions.total >= 2) {
@@ -123,7 +123,8 @@ export const login = async (req, res, next) => {
     httpOnly: true,
     signed: true,
     sameSite: "none",
-    secure:true,
+    secure: true,
+    path: "/",
     maxAge: sessionExpiryTime,
   });
   res.json({ message: "logged in" });
@@ -145,22 +146,22 @@ export const getAllUsers = async (req, res) => {
 };
 
 export const getCurrentUser = async (req, res) => {
-  try{
-const user = await User.findById(req.user._id).lean();
-  const rootDir = await Directory.findById(user.rootDirId).lean();
-  res.status(200).json({
-    name: user.name,
-    email: user.email,
-    picture: user.picture,
-    role: user.role,
-    maxStorageInBytes: user.maxStorageInBytes,
-    usedStorageInBytes: rootDir.size,
-  });
-  }catch(err){
-    console.log("usercontroller")
-    console.log(err)
+  console.log(req.user.rootDirId);
+  try {
+    const user = await User.findById(req.user._id).lean();
+    const rootDir = await Directory.findById(user.rootDirId).lean();
+    res.status(200).json({
+      name: user.name,
+      email: user.email,
+      picture: user.picture,
+      role: user.role,
+      maxStorageInBytes: user.maxStorageInBytes,
+      usedStorageInBytes: rootDir.size,
+    });
+  } catch (err) {
+    console.log("usercontroller");
+    console.log(err);
   }
-  
 };
 
 export const logout = async (req, res) => {
@@ -187,7 +188,7 @@ export const logoutAll = async (req, res) => {
     `@userId:{${session.userId}}`,
     {
       RETURN: [],
-    }
+    },
   );
   await redisClient.del(allSessions.documents.map(({ id }) => id));
   res.status(204).end();
