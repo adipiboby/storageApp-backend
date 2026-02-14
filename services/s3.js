@@ -8,10 +8,12 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-const s3Client = new S3Client({ 
-  profile: "nodejs", 
-  aws_access_key_id:"AKIAX6V4EGCVBBSZCB65",
-  aws_secret_access_key:process.env.AWS_SECRET_KEY
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION || "ap-south-1",
+  credentials: {
+    accessKeyId: "AKIAX6V4EGCVBBSZCB65",
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+  },
 });
 
 export const createUploadSignedUrl = async ({ key, contentType }) => {
