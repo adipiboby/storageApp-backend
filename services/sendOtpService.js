@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   auth: {
     user: "adipimanojkumar@gmail.com",
-    pass: "sjuh vycq zakf xwky",
+    pass: process.env.NODE_MAILER_SECRET_KEY,
   },
 });
  const otp = Math.floor(1000 + Math.random() * 9000).toString();
