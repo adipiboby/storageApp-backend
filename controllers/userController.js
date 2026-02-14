@@ -80,6 +80,9 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   const { success, data } = loginSchema.safeParse(req.body);
+  console.log("BODY:", req.body); // ADD THIS
+  console.log("EMAIL:", req.body.email); // ADD
+  console.log("PASSWORD:", req.body.password); // ADD
 
   if (!success) {
     return res.status(400).json({ error: "Invalid Credentials" });
