@@ -7,42 +7,37 @@ import nodemailer from "nodemailer"
 // const resend = new Resend("re_Q6KEKoDn_Gveb78JtUkTzZWzQ3krp2E2k");
 
 export async function sendOtpService(email) {
-  console.log(email)
- // Create a test account or replace with real credentials.
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  auth: {
-    user: "adipimanojkumar@gmail.com",
-    pass: "sjuh vycq zakf xwky",
-  },
-});
- const otp = Math.floor(1000 + Math.random() * 9000).toString();
+  console.log("Sending OTP to:", email);
 
-  // Upsert OTP (replace if it already exists)
+  const transporter = nodemailer.createTransport({
+    service: "gmail", // better than host config
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const otp = Math.floor(1000 + Math.random() * 9000).toString();
+
   await OTP.findOneAndUpdate(
     { email },
     { otp, createdAt: new Date() },
     { upsert: true }
   );
 
-// Wrap in an async IIFE so we can use await.
-(async () => {
+  // ✅ Proper await (NO IIFE)
   const info = await transporter.sendMail({
-    from:"'King  Sent' <adipimanojkumar@gmail.com>" ,
+    from: `"King Sent" <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: "Otp",
-    html: `<div style=' background-color: black; 
-      color: white; 
-      padding: 20px; 
-      text-align: center;
-      height:100%;
-      font-family: Arial, sans-serif;'>
-      <h1 style='color:green;'>${otp}</h1>
-      </div>`, // HTML body
-    text: "Hello world?", // plain‑text body
+    subject: "Your OTP Code",
+    html: `
+      <div style="background:black;color:white;padding:20px;text-align:center;">
+        <h1 style="color:green;">${otp}</h1>
+      </div>
+    `,
   });
 
-  console.log("Message sent: %s", info.messageId);
-})()
-  return { success: true, message: `OTP sent successfully on ${email}` };
+  console.log("Message sent:", info.messageId);
+
+  return { success: true, message: `OTP sent successfully to ${email}` };
 }
