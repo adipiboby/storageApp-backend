@@ -123,13 +123,14 @@ console.log("session id")
   const sessionExpiryTime = 60 * 1000 * 60 * 24 * 7;
   await redisClient.expire(redisKey, sessionExpiryTime / 1000);
 
-  res.cookie("sid", sessionId, {
+  const cook = res.cookie("sid", sessionId, {
     httpOnly: true,
     signed: true,
     sameSite: "none",
     secure: true,
     maxAge: sessionExpiryTime,
   });
+console.log(cook)
   res.json({ message: "logged in" });
 };
 
