@@ -77,7 +77,7 @@ export const loginWithGoogle = async (req, res, next) => {
       signed: true,
       maxAge: sessionExpiryTime,
     });
-
+console.log("cookie sended to frontend")
     return res.json({ message: "logged in" });
   }
 
