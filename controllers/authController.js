@@ -76,6 +76,8 @@ export const loginWithGoogle = async (req, res, next) => {
       httpOnly: true,
       signed: true,
       maxAge: sessionExpiryTime,
+      sameSite: "none",
+      secure: true,
     });
     console.log("cookie sended to frontend");
     return res.json({ message: "logged in" });
@@ -124,6 +126,8 @@ export const loginWithGoogle = async (req, res, next) => {
       httpOnly: true,
       signed: true,
       maxAge: sessionExpiryTime,
+      sameSite: "none",
+      secure: true,
     });
 
     mongooseSession.commitTransaction();
