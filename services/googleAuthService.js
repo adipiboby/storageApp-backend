@@ -7,7 +7,7 @@ const client = new OAuth2Client({
 });
 
 export async function verifyIdToken(idToken) {
-  console.log(idToken)
+  console.log(idToken);
   const loginTicket = await client.verifyIdToken({
     idToken,
     audience: clientId,
@@ -16,3 +16,4 @@ export async function verifyIdToken(idToken) {
   const userData = loginTicket.getPayload();
   return userData;
 }
+
