@@ -25,20 +25,17 @@ app.set("trust proxy", 1);
 
 app.use(
   cors({
-    origin: "https://storageapp-frontend-user.netlify.app",
+    origin: [
+      "http://localhost:5173",
+      "https://storageapp-frontend-user.netlify.app",
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    
   }),
 );
 
-app.options(
-  "*",
-  cors({
-    origin: "https://storageapp-frontend-user.netlify.app",
-    credentials: true,
-  }),
-);
+
 app.use("/directory", checkAuth, directoryRoutes);
 app.use("/file", checkAuth, fileRoutes);
 app.use("/subscriptions", checkAuth, subscriptionRoutes);
