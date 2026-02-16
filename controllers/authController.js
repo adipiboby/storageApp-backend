@@ -50,7 +50,7 @@ export const loginWithGoogle = async (req, res, next) => {
       `@userId:{${user.id}}`,
       {
         RETURN: [],
-      }
+      },
     );
 
     if (allSessions.total >= 2) {
@@ -77,7 +77,7 @@ export const loginWithGoogle = async (req, res, next) => {
       signed: true,
       maxAge: sessionExpiryTime,
     });
-console.log("cookie sended to frontend")
+    console.log("cookie sended to frontend");
     return res.json({ message: "logged in" });
   }
 
@@ -96,7 +96,7 @@ console.log("cookie sended to frontend")
         parentDirId: null,
         userId,
       },
-      { mongooseSession }
+      { mongooseSession },
     );
 
     await User.insertOne(
@@ -107,7 +107,7 @@ console.log("cookie sended to frontend")
         picture,
         rootDirId,
       },
-      { mongooseSession }
+      { mongooseSession },
     );
 
     const sessionId = crypto.randomUUID();
