@@ -15,23 +15,17 @@ await connectDB();
 const PORT = process.env.PORT || 4000;
 
 const app = express();
-app.use((req, res, next) => {
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
-  next();
-});
+
 app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(express.json());
 app.set("trust proxy", 1);
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://storageapp-frontend-user.netlify.app",
-    ],
+    origin: "https://storageapp-frontend-user.netlify.app",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    
+
   }),
 );
 
