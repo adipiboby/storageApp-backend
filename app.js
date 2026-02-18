@@ -22,7 +22,7 @@ app.set("trust proxy", 1);
 
 app.use(
   cors({
-    origin: ["https://storageapp-frontend-user.netlify.app/","http://localhost:5173"],
+    origin: "https://storageapp-frontend-user.netlify.app/",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
   }),
