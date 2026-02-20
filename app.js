@@ -19,7 +19,9 @@ const app = express();
 app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(express.json());
 app.set("trust proxy", 1);
-
+app.use("/", (req,res)=>{
+  res.json({hii:"heloo"})
+});
 app.use(
   cors({
     origin: "https://storageapp-frontend-user.netlify.app",
