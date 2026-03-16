@@ -8,6 +8,7 @@ import userRoutes from "./routes/userRoutes.js";
 import webhookRoutes from "./routes/webhookRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import checkAuth from "./middlewares/authMiddleware.js";
+ import { spawn } from "child_process";
 import { connectDB } from "./config/db.js";
 
 await connectDB();
@@ -33,7 +34,27 @@ app.use("/subscriptions", checkAuth, subscriptionRoutes);
 app.use("/webhook", webhookRoutes);
 app.use("/", userRoutes);
 app.use("/auth", authRoutes);
+app.post("/github-webhook",(req,res)=>{
+const childprocess = spawn("bash", ["/home/ubuntu/deploy-frontend.sh"]);
 
+childprocess.stdout.on("data",(data)=>{
+    process.stdout.write(data);
+})
+childprocess.stderr.on("data",(err)=>{
+  process.stderr.write(err)
+})
+childprocess.on("close",(code)=>{
+    if(code===0){
+        console.log("scripted executed succesfully!")
+    }else{
+        console.log("script failed");
+    }
+})
+
+childprocess.on("error",(err)=>{
+    console.log("error in spwaning the process!")
+})
+})
 app.use((err, req, res, next) => {
   console.log(err);
   res.status(err.status || 500).json({ error: "Something went wrong!" });
