@@ -35,6 +35,8 @@ app.use("/webhook", webhookRoutes);
 app.use("/", userRoutes);
 app.use("/auth", authRoutes);
 app.post("/github-webhook", (req, res) => {
+  console.log(req.headers);
+  console.log(req.body);
   const childprocess = spawn("bash", ["/home/ubuntu/deploy-frontend.sh"]);
 
   childprocess.stdout.on("data", (data) => {
@@ -55,6 +57,7 @@ app.post("/github-webhook", (req, res) => {
   childprocess.on("error", (err) => {
     res.json({ message: "ok" });
     console.log("error in spwaning the process!");
+    console.log(err);
   });
 });
 app.use((err, req, res, next) => {
