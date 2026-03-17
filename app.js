@@ -39,14 +39,13 @@ app.post("/github-webhook", (req, res) => {
   if(!givenSignature){
     return res.status(403).json({error:"invalid signature"})
   }
-  const calculatedSignature ="sha256="+ crypto.createHmac("sha256","adipi@321").update(JSON.stringify(payload)).digest("hex")
+  const calculatedSignature ="sha256="+ crypto.createHmac("sha256","adipi@321").update(JSON.stringify(req.body)).digest("hex")
 console.log(calculatedSignature)
 if(givenSignature!==calculatedSignature){
   return res.status(403).json({error:"invalid signature"})
 }
    res.json({ message: "ok" });
   const childprocess = spawn("bash", ["/home/ubuntu/deploy-frontend.sh"]);
-  console.log("just fro test");
   childprocess.stdout.on("data", (data) => {
     process.stdout.write(data);
   });
