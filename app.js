@@ -80,7 +80,7 @@ app.post("/github-webhook-backend", (req, res) => {
   const givenSignature = req.headers["x-hub-signature-256"];
   console.log(givenSignature);
   console.log(
-    "heloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
+    "heloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
   );
   if (!givenSignature) {
     return res.status(403).json({ error: "invalid signature" });
