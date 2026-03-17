@@ -37,7 +37,7 @@ app.use("/auth", authRoutes);
 app.post("/github-webhook", (req, res) => {
   console.log(req.headers);
   console.log(req.body);
-  const childprocess = spawn("bash", ["/home/ubuntu/deploy-frontend.js"]);
+  const childprocess = spawn("bash", ["/home/ubuntu/deploy-frontend.mjs"]);
 
   childprocess.stdout.on("data", (data) => {
     process.stdout.write(data);
@@ -60,10 +60,12 @@ app.post("/github-webhook", (req, res) => {
     console.log(err);
   });
 });
+
+
 app.post("/github-webhook-backend", (req, res) => {
   console.log(req.headers);
   console.log(req.body);
-  const childprocess = spawn("bash", ["/home/ubuntu/deploy-backend.js"]);
+  const childprocess = spawn("bash", ["/home/ubuntu/deploy-backend.mjs"]);
 
   childprocess.stdout.on("data", (data) => {
     process.stdout.write(data);
@@ -74,7 +76,7 @@ app.post("/github-webhook-backend", (req, res) => {
   childprocess.on("close", (code) => {
     res.json({ message: "ok" });
     if (code === 0) {
-      console.log("scripted executed succesfully!");
+      console.log("backend script executed succesfully!");
     } else {
       console.log("script failed");
     }
@@ -86,6 +88,8 @@ app.post("/github-webhook-backend", (req, res) => {
     console.log(err);
   });
 });
+
+
 app.use((err, req, res, next) => {
   console.log(err);
   res.status(err.status || 500).json({ error: "Something went wrong!" });
