@@ -36,23 +36,17 @@ app.use("/", userRoutes);
 app.use("/auth", authRoutes);
 app.post("/github-webhook", (req, res) => {
   const givenSignature = req.headers["x-hub-signature-256"];
+  console.log(givenSignature)
   if (!givenSignature) {
     return res.status(403).json({ error: "invalid signature" });
   }
-  const calculatedSignature =
-    "sha256=" +
-    crypto
-      .createHmac("sha256", "adipi@321")
-      .update(JSON.stringify(payload))
-      .digest("hex");
-  console.log(calculatedSignature);
-  if (givenSignature !== calculatedSignature) {
-    return res.status(403).json({ error: "invalid signature" });
-  }
-  res.json({ message: "ok" });
-  console.log("running webhook");
+  const calculatedSignature ="sha256="+ crypto.createHmac("sha256","adipi@321").update(JSON.stringify(req.body)).digest("hex")
+console.log(calculatedSignature)
+if(givenSignature!==calculatedSignature){
+  return res.status(403).json({error:"invalid signature"})
+}
+   res.json({ message: "ok" });
   const childprocess = spawn("bash", ["/home/ubuntu/deploy-frontend.sh"]);
-  console.log("just fro test");
   childprocess.stdout.on("data", (data) => {
     process.stdout.write(data);
   });
