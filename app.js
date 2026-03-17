@@ -37,7 +37,33 @@ app.use("/auth", authRoutes);
 app.post("/github-webhook", (req, res) => {
   console.log(req.headers);
   console.log(req.body);
-  const childprocess = spawn("bash", ["/home/ubuntu/deploy-frontend.sh"]);
+  const childprocess = spawn("bash", ["/home/ubuntu/deploy-frontend.js"]);
+
+  childprocess.stdout.on("data", (data) => {
+    process.stdout.write(data);
+  });
+  childprocess.stderr.on("data", (err) => {
+    process.stderr.write(err);
+  });
+  childprocess.on("close", (code) => {
+    res.json({ message: "ok" });
+    if (code === 0) {
+      console.log("scripted executed succesfully!");
+    } else {
+      console.log("script failed");
+    }
+  });
+
+  childprocess.on("error", (err) => {
+    res.json({ message: "ok" });
+    console.log("error in spwaning the process!");
+    console.log(err);
+  });
+});
+app.post("/github-webhook-backend", (req, res) => {
+  console.log(req.headers);
+  console.log(req.body);
+  const childprocess = spawn("bash", ["/home/ubuntu/deploy-backend.js"]);
 
   childprocess.stdout.on("data", (data) => {
     process.stdout.write(data);
