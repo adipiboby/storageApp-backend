@@ -77,8 +77,25 @@ app.post("/github-webhook", (req, res) => {
 });
 
 app.post("/github-webhook-backend", (req, res) => {
-  console.log(req.headers);
-  console.log(req.body);
+  const givenSignature = req.headers["x-hub-signature-256"];
+  console.log(givenSignature);
+  console.log(
+    "heloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
+  );
+  if (!givenSignature) {
+    return res.status(403).json({ error: "invalid signature" });
+  }
+  const calculatedSignature =
+    "sha256=" +
+    crypto
+      .createHmac("sha256",process.env.GITHUB_SECRET)
+      .update(JSON.stringify(req.body))
+      .digest("hex");
+  console.log(calculatedSignature);
+  if (givenSignature !== calculatedSignature) {
+    return res.status(403).json({ error: "invalid signature" });
+  }
+  res.json({ message: "ok" });
   const childprocess = spawn("bash", ["/home/ubuntu/deploy-backend.sh"]);
 
   childprocess.stdout.on("data", (data) => {
