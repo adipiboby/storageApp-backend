@@ -10,7 +10,7 @@ import authRoutes from "./routes/authRoutes.js";
 import checkAuth from "./middlewares/authMiddleware.js";
 import { spawn } from "child_process";
 import { connectDB } from "./config/db.js";
-import crypto from "crypto"
+import crypto from "crypto";
 await connectDB();
 
 const PORT = process.env.PORT || 4000;
@@ -36,15 +36,21 @@ app.use("/", userRoutes);
 app.use("/auth", authRoutes);
 app.post("/github-webhook", (req, res) => {
   const givenSignature = req.headers["x-hub-signature-256"];
-  if(!givenSignature){
-    return res.status(403).json({error:"invalid signature"})
+  if (!givenSignature) {
+    return res.status(403).json({ error: "invalid signature" });
   }
-  const calculatedSignature ="sha256="+ crypto.createHmac("sha256","adipi@321").update(JSON.stringify(payload)).digest("hex")
-console.log(calculatedSignature)
-if(givenSignature!==calculatedSignature){
-  return res.status(403).json({error:"invalid signature"})
-}
-   res.json({ message: "ok" });
+  const calculatedSignature =
+    "sha256=" +
+    crypto
+      .createHmac("sha256", "adipi@321")
+      .update(JSON.stringify(payload))
+      .digest("hex");
+  console.log(calculatedSignature);
+  if (givenSignature !== calculatedSignature) {
+    return res.status(403).json({ error: "invalid signature" });
+  }
+  res.json({ message: "ok" });
+  console.log("running webhook");
   const childprocess = spawn("bash", ["/home/ubuntu/deploy-frontend.sh"]);
   console.log("just fro test");
   childprocess.stdout.on("data", (data) => {
