@@ -64,7 +64,7 @@ export const renameFile = async (req, res, next) => {
     await file.save();
     return res.status(200).json({ message: "Renamed" });
   } catch (err) {
-    console.log(err);
+  
     err.status = 500;
     next(err);
   }
@@ -113,7 +113,7 @@ export const uploadInitiate = async (req, res) => {
     const remainingSpace = user.maxStorageInBytes - rootDir.size;
 
     if (filesize > remainingSpace) {
-      console.log("File too large");
+   
       return res.status(507).json({ error: "Not enough storage." });
     }
 

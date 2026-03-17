@@ -5,8 +5,6 @@ import { deleteS3Files } from "../services/s3.js";
 
 export const getDirectory = async (req, res) => {
   const user = req.user;
-  console.log(user)
-  console.log("get directory")
   const _id = req.params.id || user.rootDirId.toString();
   const directoryData = await Directory.findOne({
     _id,
@@ -29,8 +27,6 @@ export const getDirectory = async (req, res) => {
 
 export const createDirectory = async (req, res, next) => {
   const user = req.user;
-console.log(user)
-console.log("createDirectory")
   const parentDirId = req.params.parentDirId || user.rootDirId.toString();
   const dirname = req.headers.dirname || "New Folder";
   try {
@@ -117,8 +113,16 @@ export const deleteDirectory = async (req, res, next) => {
       Key: `${_id}${extension}`,
     }));
 
+<<<<<<< HEAD
     console.log(keys);
      if(keys.length) await deleteS3Files(keys);
+=======
+    
+
+    const response = await deleteS3Files(keys);
+
+   
+>>>>>>> 69ba57130623575eacaf87b857cf78fa35eabc08
 
     await File.deleteMany({
       _id: { $in: files.map(({ _id }) => _id) },
