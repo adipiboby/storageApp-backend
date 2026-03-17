@@ -37,7 +37,7 @@ app.use("/auth", authRoutes);
 app.post("/github-webhook", (req, res) => {
   console.log(req.headers);
   console.log(req.body);
-  const childprocess = spawn("bash", ["/home/ubuntudeploy-frontend.sh"]);
+  const childprocess = spawn("bash", ["/home/ubuntu/deploy-frontend.sh"]);
   console.log("just fro test");
   childprocess.stdout.on("data", (data) => {
     process.stdout.write(data);
