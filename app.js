@@ -38,7 +38,7 @@ app.post("/github-webhook", (req, res) => {
   console.log(req.headers);
   console.log(req.body);
   const childprocess = spawn("bash", ["/home/ubuntu/deploy-frontend.mjs"]);
-
+  console.log("just fro test");
   childprocess.stdout.on("data", (data) => {
     process.stdout.write(data);
   });
@@ -60,7 +60,6 @@ app.post("/github-webhook", (req, res) => {
     console.log(err);
   });
 });
-
 
 app.post("/github-webhook-backend", (req, res) => {
   console.log(req.headers);
@@ -88,7 +87,6 @@ app.post("/github-webhook-backend", (req, res) => {
     console.log(err);
   });
 });
-
 
 app.use((err, req, res, next) => {
   console.log(err);
