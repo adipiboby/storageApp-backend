@@ -118,10 +118,7 @@ export const deleteDirectory = async (req, res, next) => {
     }));
 
     console.log(keys);
-
-    const response = await deleteS3Files(keys);
-
-    console.log(response);
+     if(keys.length) await deleteS3Files(keys);
 
     await File.deleteMany({
       _id: { $in: files.map(({ _id }) => _id) },
@@ -133,7 +130,7 @@ export const deleteDirectory = async (req, res, next) => {
 
     await updateDirectoriesSize(directoryData.parentDirId, -directoryData.size);
   } catch (err) {
-    next(err);
+    return next(err);
   }
   return res.json({ message: "Files deleted successfully" });
 };
