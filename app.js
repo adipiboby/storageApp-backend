@@ -37,9 +37,7 @@ app.use("/auth", authRoutes);
 app.post("/github-webhook", (req, res) => {
   const givenSignature = req.headers["x-hub-signature-256"];
   console.log(givenSignature);
-  console.log(
-    "heloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
-  );
+
   if (!givenSignature) {
     return res.status(403).json({ error: "invalid signature" });
   }
