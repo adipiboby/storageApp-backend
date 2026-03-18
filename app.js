@@ -46,7 +46,7 @@ app.post("/github-webhook", (req, res) => {
   const calculatedSignature =
     "sha256=" +
     crypto
-      .createHmac("sha256",process.env.GITHUB_SECRET)
+      .createHmac("sha256", process.env.GITHUB_SECRET)
       .update(JSON.stringify(req.body))
       .digest("hex");
   console.log(calculatedSignature);
@@ -54,7 +54,14 @@ app.post("/github-webhook", (req, res) => {
     return res.status(403).json({ error: "invalid signature" });
   }
   res.json({ message: "ok" });
-  const childprocess = spawn("bash", ["/home/ubuntu/deploy-frontend.sh"]);
+  let repository;
+  if (req.body.repository.name === "storageApp-frontend") {
+    repository = "frontend";
+  } else {
+    repository = "backend";
+  }
+  console.log({ repository });
+  const childprocess = spawn("bash", [`/home/ubuntu/deploy-${repository}.sh`]);
   childprocess.stdout.on("data", (data) => {
     process.stdout.write(data);
   });
@@ -76,6 +83,7 @@ app.post("/github-webhook", (req, res) => {
   });
 });
 
+//this is second method to trigger backen web hook we are not using it
 app.post("/github-webhook-backend", (req, res) => {
   const givenSignature = req.headers["x-hub-signature-256"];
   console.log(givenSignature);
@@ -88,7 +96,7 @@ app.post("/github-webhook-backend", (req, res) => {
   const calculatedSignature =
     "sha256=" +
     crypto
-      .createHmac("sha256",process.env.GITHUB_SECRET)
+      .createHmac("sha256", process.env.GITHUB_SECRET)
       .update(JSON.stringify(req.body))
       .digest("hex");
   console.log(calculatedSignature);
