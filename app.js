@@ -37,7 +37,7 @@ app.use("/auth", authRoutes);
 app.post("/github-webhook", (req, res) => {
   const givenSignature = req.headers["x-hub-signature-256"];
   console.log(givenSignature);
-
+  console.log("iam running as a backend");
   if (!givenSignature) {
     return res.status(403).json({ error: "invalid signature" });
   }
@@ -53,10 +53,12 @@ app.post("/github-webhook", (req, res) => {
   }
   res.json({ message: "ok" });
   let repository;
-  if (req.body.repository.name === "storageApp-frontend") {
+  if (req.body.repository?.name === "storageApp-frontend") {
     repository = "frontend";
-  } else {
+  } else if (req.body.repository?.name === "storageApp-backend") {
     repository = "backend";
+  } else {
+    return res.status(400).json({ error: "unknown repository" });
   }
   console.log({ repository });
   const childprocess = spawn("bash", [`/home/ubuntu/deploy-${repository}.sh`]);
